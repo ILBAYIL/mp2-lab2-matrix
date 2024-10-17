@@ -1,30 +1,30 @@
-﻿// ННГУ, ИИТММ, Курс "Алгоритмы и структуры данных"
+﻿// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
 //
-// Copyright (c) Сысоев А.В.
+// sample_matrix.cpp - Copyright (c) Гергель В.П. 07.05.2001
+//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (20.04.2015)
 //
-// Тестирование матриц
+// Тестирование верхнетреугольной матрицы
 
 #include <iostream>
-#include "tmatrix.h"
+#include "utmatrix.h"
 //---------------------------------------------------------------------------
-
 void main()
 {
-  TDynamicMatrix<int> a(5), b(5), c(5);
-  int i, j;
+    TDynamicMatrix<int> a(5), b(5), c(5);
+    int i, j;
 
-  setlocale(LC_ALL, "Russian");
-  cout << "Тестирование класс работы с матрицами"
-    << endl;
-  for (i = 0; i < 5; i++)
-    for (j = i; j < 5; j++ )
-    {
-      a[i][j] =  i * 10 + j;
-      b[i][j] = (i * 10 + j) * 100;
-    }
-  c = a + b;
-  cout << "Matrix a = " << endl << a << endl;
-  cout << "Matrix b = " << endl << b << endl;
-  cout << "Matrix c = a + b" << endl << c << endl;
+    setlocale(LC_ALL, "Russian");
+    cout << "Тестирование класс работы с матрицами"
+        << endl;
+    for (i = 0; i < 5; i++)
+        for (j = i; j < 5; j++)
+        {
+            a[i][j] = i * 10 + j;
+            b[i][j] = (i * 10 + j) * 100;
+        }
+    c = a + b;
+    cout << "Matrix a = " << endl << a << endl;
+    cout << "Matrix b = " << endl << b << endl;
+    cout << "Matrix c = a + b" << endl << c << endl;
 }
 //---------------------------------------------------------------------------
