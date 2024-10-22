@@ -1,30 +1,29 @@
-﻿// ННГУ, ВМК, Курс "Методы программирования-2", С++, ООП
-//
-// sample_matrix.cpp - Copyright (c) Гергель В.П. 07.05.2001
-//   Переработано для Microsoft Visual Studio 2008 Сысоевым А.В. (20.04.2015)
-//
-// Тестирование верхнетреугольной матрицы
-
-#include <iostream>
+﻿#include <iostream>
 #include "utmatrix.h"
-//---------------------------------------------------------------------------
-void main()
-{
-    TDynamicMatrix<int> a(5), b(5), c(5);
+
+int main() {
+    TDynamicMatrix<int> a(5, 5), b(5, 5), c(5, 5); // Задаем размеры 5x5 для тестов
     int i, j;
 
     setlocale(LC_ALL, "Russian");
-    cout << "Тестирование класс работы с матрицами"
-        << endl;
-    for (i = 0; i < 5; i++)
-        for (j = i; j < 5; j++)
-        {
-            a[i][j] = i * 10 + j;
-            b[i][j] = (i * 10 + j) * 100;
+
+    try {
+        for (i = 0; i < 5; i++) {
+            for (j = 0; j < 5; j++) {
+                a[i][j] = i * 10 + j; // Заполнение матрицы a
+                b[i][j] = (i * 10 + j) * 100; // Заполнение матрицы b
+            }
         }
-    c = a + b;
-    cout << "Matrix a = " << endl << a << endl;
-    cout << "Matrix b = " << endl << b << endl;
-    cout << "Matrix c = a + b" << endl << c << endl;
+
+        c = a + b; // Сложение матриц
+
+        // Вывод матриц
+        cout << "Matrix a = " << endl << a << endl;
+        cout << "Matrix b = " << endl << b << endl;
+        cout << "Matrix c = a + b" << endl << c << endl;
+
+    }
+    catch (const std::out_of_range& e) {
+        cerr << "Ошибка: " << e.what() << endl; // Обработка ошибок
+    }
 }
-//---------------------------------------------------------------------------

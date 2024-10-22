@@ -21,7 +21,7 @@ protected:
 public:
     TDynamicVector(size_t size = 1) : sz(size) {
         if (sz == 0 || sz > MAX_VECTOR_SIZE)
-            throw out_of_range("Вектор должен быть больше нуля но меньше максимального значения");
+            throw out_of_range("Вектор должен быть больше нуля, но меньше максимального значения");
         pMem = new T[sz]();
     }
 
@@ -75,11 +75,11 @@ public:
     size_t size() const noexcept { return sz; }
 
     T& operator[](size_t ind) {
-        if (ind < 0 || ind >= sz) throw out_of_range("Индекс вне диапазона"); // Проверка на отрицательный и слишком большой индекс
-        return pMem[ind]; // Без контроля
+        if (ind >= sz) throw out_of_range("Индекс вне диапазона");
+        return pMem[ind];
     }
 
-    const T& operator[](size_t ind) const{
+    const T& operator[](size_t ind) const {
         if (ind >= sz) throw out_of_range("Индекс вне диапазона");
         return pMem[ind];
     }
@@ -144,12 +144,10 @@ public:
     }
 
     T operator*(const TDynamicVector& v) const noexcept(false) {
-        // Проверка на равенство размеров векторов
         if (sz != v.sz) {
             throw std::invalid_argument("Векторы должны быть одного размера");
         }
 
-        // Результат умножения
         T result = T(); // Предполагаем, что T поддерживает оператор сложения и имеет конструктор по умолчанию
         for (size_t i = 0; i < sz; ++i) {
             result += pMem[i] * v.pMem[i]; // Умножаем соответствующие элементы
@@ -185,7 +183,6 @@ class TDynamicMatrix : private TDynamicVector<TDynamicVector<T>>
     using TDynamicVector<TDynamicVector<T>>::sz;
 
 public:
-    size_t size() const noexcept { return sz; };
     TDynamicMatrix(size_t r = 1, size_t c = 1) : TDynamicVector<TDynamicVector<T>>(r) {
         if (r == 0 || c == 0 || r > MAX_MATRIX_SIZE || c > MAX_MATRIX_SIZE)
             throw out_of_range("Размер больше 0 и меньше максимального");
@@ -195,9 +192,7 @@ public:
     }
 
     size_t rows() const noexcept { return sz; }
-    size_t cols() const noexcept { return pMem[0].size(); }
-
-
+    size_t cols() const noexcept { return (sz > 0) ? pMem[0].size() : 0; } // Изменено для предотвращения доступа к pMem[0] при sz = 0
 
     bool operator==(const TDynamicMatrix& m) const noexcept {
         if (rows() != m.rows() || cols() != m.cols()) return false;
@@ -257,22 +252,27 @@ public:
         }
         return res;
     }
-    TDynamicVector<T>& operator[](size_t ind) {
-        if (ind < 0 || ind >= sz) throw out_of_range("Row index out of range"); // Проверка на отрицательный и слишком большой индекс
-        return pMem[ind];
+
+    TDynamicVector<T>& operator[](size_t index) {
+        if (index >= sz) throw out_of_range("Индекс вне диапазона");
+        return pMem[index];
     }
-    friend istream& operator>>(istream& istr, TDynamicMatrix& m)
-    {
+
+    const TDynamicVector<T>& operator[](size_t index) const {
+        if (index >= sz) throw out_of_range("Индекс вне диапазона");
+        return pMem[index];
+    }
+
+    friend istream& operator>>(istream& istr, TDynamicMatrix& m) {
         for (size_t i = 0; i < m.rows(); i++) {
-            istr >> m.pMem[i];
+            istr >> m[i];
         }
         return istr;
     }
 
-    friend ostream& operator<<(ostream& ostr, const TDynamicMatrix& m)
-    {
+    friend ostream& operator<<(ostream& ostr, const TDynamicMatrix& m) {
         for (size_t i = 0; i < m.rows(); i++) {
-            ostr << m.pMem[i] << endl;
+            ostr << m[i] << endl;
         }
         return ostr;
     }
